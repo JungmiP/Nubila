@@ -1,0 +1,59 @@
+language: java
+jdk:
+  - openjdk11
+
+branches:
+  only:
+    - main
+
+# Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+before_install:
+  - cd ./nubila
+  - chmod +x gradlew
+
+script: "./gradlew clean build"
+
+before_deploy:
+  - zip -r nubilaProject *
+  - mkdir -p deploy
+  - mv nubilaProject.zip deploy/nubilaProject.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: nubilaproject # 생성한 S3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: public_read
+    local_dir: deploy 
+    wait-until-deployed: true
+    on:
+      repo: dnjsrud3407/nubilaProject #Github 주소
+      branch: main
+      
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: nubilaproject # S3 버킷
+    key: nubilaProject.zip # S3 버킷에 저장된 jaewon-study.zip 파일을 EC2로 배포
+    bundle_type: zip
+    application: nubilaProject # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: nubilaProject-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      repo: dnjsrud3407/nubilaProject
+      branch: main
+
+# CI 실행 완료 시 메일로 알람
+notifications:
+  email:
+    recipients:
+      - teamhjw@gmail.com
+

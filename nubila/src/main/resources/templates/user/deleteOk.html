@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="css/haonstyle.css" th:href="@{/css/haonstyle.css}">
+    <link th:href="@{/css/user.css}" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/12cca3ed35.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/header.js}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script th:src="@{/js/myInfo.js}"></script>
+    <title>NUBILA 회원탈퇴</title>
+</head>
+<body>
+<div id="header" th:fragment="nav">
+
+    <a href="#" class="nav-toggle-btn"><i class="fas fa-bars"></i></a>
+    <div class="nav-logo">
+        <a href="/"><span>🎵</span><span>NUBILA</span></a>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="/search">정류소/경로 찾기</a></li>
+        <li><a href="/support">Support</a></li>
+    </ul>
+    <ul class="nav-member">
+        <li><a href="/user/login">로그인</a></li>
+        <li><a href="/user/join">회원가입</a></li>
+    </ul>
+</div>
+<div id="main-container">
+    <div th:replace="fragments/mainImage :: mainImage"></div>
+</div>
+<div class="container">
+    <div class="py-5 font-bold">
+        <h2>회원탈퇴</h2>
+    </div>
+    <div>
+        회원탈퇴가 완료되었습니다.
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-ok btn-lg" type="button" th:onclick="|location.href='@{/}'|">홈으로</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    const toggleBtn = document.querySelector(".nav-toggle-btn");
+    const menu = document.querySelector(".nav-menu");
+    toggleBtn.addEventListener('click', ()=>{
+        menu.classList.toggle('active');
+    });
+
+</script>
+</body>
+</html>
